@@ -6,9 +6,9 @@
  */
 
 /**
- * Implementation of hook_admin_settings() for configuring the module
+ * Implements admin settings form.
  */
-function snapengage_admin_settings_form(&$form_state) {
+function snapengage_admin_settings_form($form_state) {
   $form['account'] = array(
     '#type' => 'fieldset',
     '#title' => t('General settings'),
@@ -66,7 +66,7 @@ function snapengage_admin_settings_form(&$form_state) {
 
     if ($access) {
       $options[] = t('Add if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only).');
-      $description .= ' '. t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
+      $description .= ' ' . t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
     }
     $form['page_vis_settings']['snapengage_visibility'] = array(
       '#type' => 'radios',
@@ -85,4 +85,3 @@ function snapengage_admin_settings_form(&$form_state) {
 
   return system_settings_form($form);
 }
-

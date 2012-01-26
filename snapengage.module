@@ -1,15 +1,19 @@
 <?php
 
-/*
+/**
  * @file
  * Drupal Module: SnapEngage
  *
  * Adds the required Javascript to the bottom of all your Drupal pages
  * to add the SnapEngage widget.
  *
- * Code heavily inspired by the Google Analytics module, http://drupal.org/project/google_analytics.
+ * Code heavily inspired by the Google Analytics module,
+ * http://drupal.org/project/google_analytics.
  */
 
+/**
+ * Implements hook_menu().
+ */
 function snapengage_menu() {
   $items['admin/settings/snapengage'] = array(
     'title' => 'SnapEngage',
@@ -25,7 +29,7 @@ function snapengage_menu() {
 }
 
 /**
- * Implementation of hook_perm
+ * Implements hook_perm().
  */
 function snapengage_perm() {
   return array('administer snapengage');
@@ -33,9 +37,11 @@ function snapengage_perm() {
 
 
 /**
- * Implementation of hook_footer() to insert JavaScript at the end of the page.
+ * Implements hook_footer().
+ *
+ * Inserts JavaScript at the end of the page.
  */
-function snapengage_footer($main = 0) {
+function snapengage_init() {
   global $user;
 
   $id = variable_get('snapengage_widget_id', '');
@@ -44,15 +50,18 @@ function snapengage_footer($main = 0) {
   // 2. Track page views based on visibility value.
   // 3. Check if we should track the currently active user's role.
   if (!empty($id) && _snapengage_visibility_pages() && _snapengage_visibility_roles($user)) {
-	$script = sprintf('document.write(unescape("%%3Cscript src=\'" + ((document.location.protocol=="https:")?"https:":"http:") + "//snapabug.appspot.com/snapabug.js\' type=\'text/javascript\'%%3E%%3C/script%%3E"));</script><script type="text/javascript">
+    $script = sprintf('document.write(unescape("%%3Cscript src=\'" + ((document.location.protocol=="https:")?"https:":"http:") + "//snapabug.appspot.com/snapabug.js\' type=\'text/javascript\'%%3E%%3C/script%%3E"));</script><script type="text/javascript">
 	SnapABug.addButton(\'%s\',"%s","%s");', $id, 0, '55%');
-    drupal_add_js($script, 'inline', 'footer');
+    drupal_add_js($script, array(
+        'type' => 'inline',
+        'scope' => 'footer',
+      ));
   }
 }
 
 /**
- * Based on visibility setting this function returns TRUE if SnapEngage code should
- * be added for the current role and otherwise FALSE.
+ * Based on visibility setting this function returns TRUE if SnapEngage code
+ * should be added for the current role and otherwise FALSE.
  */
 function _snapengage_visibility_roles($account) {
 
@@ -64,14 +73,16 @@ function _snapengage_visibility_roles($account) {
     foreach (array_keys($account->roles) as $rid) {
       // Is the current user a member of one role enabled for tracking?
       if (isset($roles[$rid]) && $rid == $roles[$rid]) {
-        // Current user is a member of a role that should be shown the SnapEngage widget.
+        // Current user is a member of a role that should be shown the
+        // SnapEngage widget.
         $enabled = TRUE;
         break;
       }
     }
   }
   else {
-    // No role is selected for tracking, therefor the widget should be shown for all roles.
+    // No role is selected for tracking, therefor the widget should be shown for
+    // all roles.
     $enabled = TRUE;
   }
 
@@ -79,8 +90,8 @@ function _snapengage_visibility_roles($account) {
 }
 
 /**
- * Based on visibility setting this function returns TRUE if SnapEngage code should
- * be added to the current page and otherwise FALSE.
+ * Based on visibility setting this function returns TRUE if SnapEngage code
+ * should be added to the current page and otherwise FALSE.
  */
 function _snapengage_visibility_pages() {
   static $page_match;
