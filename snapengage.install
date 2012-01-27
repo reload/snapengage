@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Install hooks for snapengage module.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function snapengage_enable() {
+  variable_set('snapengage_supported_languages', array(
+      'da',
+      'cs',
+      'de',
+      'en',
+      'et',
+      'es',
+      'fr',
+      'fr_CA',
+      'is',
+      'it',
+      'hu',
+      'lv',
+      'lt',
+      'nl',
+      'nb',
+      'nn',
+      'pl',
+      'pt',
+      'ru',
+      'ro',
+      'sk',
+      'fi',
+      'sv',
+      'tr',
+      'iw',
+      'ja',
+      'ko',
+      'zh',
+      'zh_TW',
+      'ar',
+    ));
+}
+
+/**
+ * Implements hook_disable().
+ */
+function snapengage_disable() {
+  variable_delete('snapengage_supported_languages');
+}

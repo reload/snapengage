@@ -43,6 +43,7 @@ function snapengage_perm() {
  */
 function snapengage_init() {
   global $user;
+  global $language;
 
   $id = variable_get('snapengage_widget_id', '');
 
@@ -50,8 +51,11 @@ function snapengage_init() {
   // 2. Track page views based on visibility value.
   // 3. Check if we should track the currently active user's role.
   if (!empty($id) && _snapengage_visibility_pages() && _snapengage_visibility_roles($user)) {
-    $script = sprintf('document.write(unescape("%%3Cscript src=\'" + ((document.location.protocol=="https:")?"https:":"http:") + "//snapabug.appspot.com/snapabug.js\' type=\'text/javascript\'%%3E%%3C/script%%3E"));</script><script type="text/javascript">
-	SnapABug.addButton(\'%s\',"%s","%s");', $id, 0, '55%');
+    $script = 'document.write(unescape("%3Cscript src=\'" + ((document.location.protocol=="https:")?"https:":"http:") + "//snapabug.appspot.com/snapabug.js\' type=\'text/javascript\'%3E%3C/script%3E"));</script><script type="text/javascript">';
+    if ($language->language != 'en' AND in_array($language->language, variable_get('snapengage_supported_languages', array()))) {
+      $script .= sprintf('SnapABug.setLocale("%s");', $language->language);
+    }
+    $script .= sprintf('SnapABug.addButton(\'%s\',"%s","%s");', $id, 0, '55%');
     drupal_add_js($script, array(
         'type' => 'inline',
         'scope' => 'footer',
