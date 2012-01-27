@@ -15,7 +15,7 @@
  * Implements hook_menu().
  */
 function snapengage_menu() {
-  $items['admin/settings/snapengage'] = array(
+  $items['admin/config/system/snapengage'] = array(
     'title' => 'SnapEngage',
     'description' => 'Configure the settings used to add a SnapEngage widget to your site.',
     'page callback' => 'drupal_get_form',
